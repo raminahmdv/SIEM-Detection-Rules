@@ -1,0 +1,1 @@
+# Mərkəzi SIEM yeniləmə skripti
