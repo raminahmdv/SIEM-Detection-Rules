@@ -1,8 +1,8 @@
 title: SOC Web - Advanced SQL Injection Attempt
-id: 9a1c0001-0000-0000-0000-000000000001
+id: f4b7a120-13c5-4a9b-8e2d-000000000001
 status: experimental
-description: Web serverlərə yönəlik mürəkkəb SQL Injection (SQLi) hücum cəhdlərini aşkarlayır.
-author: Ramin Ahmedov
+description: Web serverlərə yönəlik mürəkkəb SQL Injection (SQLi) və WAF atlatma cəhdlərini aşkarlayır (OWASP A03).
+author: Ramin Əhmədov
 date: 2026-10-03
 tags:
   - attack.t1190
@@ -10,6 +10,6 @@ logsource:
   category: webserver
 detection:
   selection:
-    cs-uri-query|re: '(?i)(union(\s|\+)+select|select.*from|or\s*1\s*=\s*1|sleep\(\d+\)|xp_cmdshell)'
+    cs-uri-query|re: '(?i)(union(\s|\+)+select|select.*from|or\s*1\s*=\s*1|sleep\(\d+\)|xp_cmdshell|%27)'
   condition: selection
 level: high
