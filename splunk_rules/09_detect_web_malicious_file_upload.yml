@@ -1,0 +1,23 @@
+title: SOC Web - Potential Malicious File Upload
+id: 1b8e5c42-9d73-46f0-a2c1-7e4b6d9f0a09
+status: experimental
+description: Detects POST requests to common upload endpoints where the logged request content indicates an executable server-side script file.
+author: Ramin Ahmedov
+date: 2026-10-03
+references:
+  - https://owasp.org/www-community/vulnerabilities/Unrestricted_File_Upload
+logsource:
+  category: webserver
+detection:
+  selection:
+    http_method: POST
+    url_path|re: '(?i)(?:^|/)(?:upload|uploads|file-upload|media-upload|attachment|attachments)(?:/|\?|$)'
+  selection_script:
+    request_body|re: '(?i)\.(?:php|phtml|phar|jsp|jspx|asp|aspx|cfm|cgi)(?:$|[\s"'';&?])'
+  condition: selection and selection_script
+falsepositives:
+  - Authorized security testing
+  - Applications that legitimately accept server-side template files
+level: high
+tags:
+  - attack.t1190
