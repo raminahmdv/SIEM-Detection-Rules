@@ -1,0 +1,20 @@
+title: SOC Web - Server-Side Request Forgery (SSRF) Attempt
+id: c1a9e4f7-83d2-4b61-95e0-7f2c6d8a9b05
+status: experimental
+description: Detects URL parameters targeting loopback, localhost, or cloud metadata endpoints, which are common SSRF indicators.
+author: Ramin Ahmedov
+date: 2026-10-03
+references:
+  - https://owasp.org/www-community/attacks/Server_Side_Request_Forgery
+logsource:
+  category: webserver
+detection:
+  selection:
+    url_query|re: '(?i)(https?%3a%2f%2f|https?://)(?:localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\]|169\.254\.169\.254)(?::\d+)?(?:[/?%]|$)'
+  condition: selection
+falsepositives:
+  - Internal application health checks exposed through a web endpoint
+  - Authorized SSRF testing
+level: high
+tags:
+  - attack.t1190
