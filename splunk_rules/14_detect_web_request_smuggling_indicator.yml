@@ -1,0 +1,20 @@
+title: SOC Web - HTTP Request Smuggling Indicator
+id: 6a2c8e41-9f73-45b0-b6d1-7c5e2a8f4b14
+status: experimental
+description: Detects requests containing both Content-Length and Transfer-Encoding indicators when raw HTTP header data is available.
+author: Ramin Ahmedov
+date: 2026-10-03
+references:
+  - https://portswigger.net/web-security/request-smuggling
+logsource:
+  category: webserver
+detection:
+  selection:
+    request_headers|re: '(?is)content-length\s*:.*(?:\r?\n).*transfer-encoding\s*:'
+  selection_reverse:
+    request_headers|re: '(?is)transfer-encoding\s*:.*(?:\r?\n).*content-length\s*:'
+  condition: 1 of selection_*
+falsepositives:
+  - Legitimate proxy or gateway normalization
+  - Authorized HTTP protocol testing
+level: high
