@@ -1,0 +1,16 @@
+title: SOC Web - Cross-Site Scripting (XSS) Attempt
+id: f4b7a120-13c5-4a9b-8e2d-000000000002
+status: experimental
+description: URL parametrləri vasitəsilə Reflected və ya Stored XSS zərərli kodlarının (JavaScript) icra edilməsi cəhdlərini təsbit edir.
+author: Ramin Ahmedov
+date: 2026-10-03
+tags:
+  - attack.t1190
+  - attack.t1189
+logsource:
+  category: webserver
+detection:
+  selection:
+    cs-uri-query|re: '(?i)(<script>|%3Cscript%3E|javascript:|onerror\s*=|onload\s*=|eval\()'
+  condition: selection
+level: high
