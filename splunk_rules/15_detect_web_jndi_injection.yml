@@ -1,0 +1,22 @@
+title: SOC Web - JNDI Injection Indicator
+id: 9c5e2a71-4d83-46b0-a1f7-8e3c6d2b5a15
+status: experimental
+description: Detects common JNDI lookup payload indicators in HTTP URL paths or query strings.
+author: Ramin Ahmedov
+date: 2026-10-03
+references:
+  - https://logging.apache.org/log4j/2.x/security.html
+logsource:
+  category: webserver
+detection:
+  selection_query:
+    url_query|re: '(?i)(\$\{(?:jndi|lower|upper):[^}]+\}|%24%7b(?:jndi|lower|upper)%3a)'
+  selection_path:
+    url_path|re: '(?i)(\$\{(?:jndi|lower|upper):[^}]+\}|%24%7b(?:jndi|lower|upper)%3a)'
+  condition: 1 of selection_*
+falsepositives:
+  - Authorized vulnerability scanning
+  - Security research and testing
+level: high
+tags:
+  - attack.t1190
