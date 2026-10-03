@@ -1,0 +1,16 @@
+title: SOC Web - Administrative Endpoint Access
+id: 4a7e2d93-5f81-46b0-9c24-1d6e8a3b7f08
+status: experimental
+description: Detects requests to common administrative or management web endpoints that should be monitored for unexpected access.
+author: Ramin Ahmedov
+date: 2026-10-03
+logsource:
+  category: webserver
+detection:
+  selection:
+    url_path|re: '(?i)(?:^|/)(?:admin|administrator|wp-admin|wp-login\.php|phpmyadmin|manager/html|jmx-console|actuator|console|jenkins)(?:/|\?|$)'
+  condition: selection
+falsepositives:
+  - Legitimate administrator access
+  - Monitoring and vulnerability assessment
+level: medium
