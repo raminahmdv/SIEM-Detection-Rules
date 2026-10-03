@@ -1,16 +1,23 @@
 title: SOC Web - Cross-Site Scripting (XSS) Attempt
-id: f4b7a120-13c5-4a9b-8e2d-000000000002
+id: f4b7a120-13c5-4a9b-8e2d-6f91c0000002
 status: experimental
-description: URL parametrləri vasitəsilə Reflected və ya Stored XSS zərərli kodlarının (JavaScript) icra edilməsi cəhdlərini təsbit edir.
+description: Detects common XSS payload indicators in HTTP requests; useful for reflected XSS and payload submission that may precede stored XSS.
 author: Ramin Ahmedov
 date: 2026-10-03
-tags:
-  - attack.t1190
-  - attack.t1189
+references:
+  - https://owasp.org/www-community/attacks/xss/
 logsource:
   category: webserver
 detection:
-  selection:
-    cs-uri-query|re: '(?i)(<script>|%3Cscript%3E|javascript:|onerror\s*=|onload\s*=|eval\()'
-  condition: selection
+  selection_query:
+    url_query|re: '(?i)(<script\b|%3c\s*script\b|javascript\s*%3a|javascript\s*:|onerror\s*=|onload\s*=|onclick\s*=|onmouseover\s*=|onfocus\s*=|<svg\b[^>]*onload\s*=|%3csvg\b)'
+  selection_path:
+    url_path|re: '(?i)(<script\b|%3c\s*script\b|javascript\s*%3a|onerror\s*=|onload\s*=|onclick\s*=|<svg\b[^>]*onload\s*=|%3csvg\b)'
+  condition: 1 of selection_*
+falsepositives:
+  - Authorized vulnerability scanning
+  - Penetration testing
+  - Security training payloads
 level: high
+tags:
+  - attack.t1190
