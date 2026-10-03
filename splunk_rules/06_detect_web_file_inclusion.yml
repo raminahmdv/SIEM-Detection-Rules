@@ -1,0 +1,23 @@
+title: SOC Web - Local or Remote File Inclusion Attempt
+id: 8f2d4a61-9c73-45b0-ae18-6d5f7c1b2e06
+status: experimental
+description: Detects common local or remote file inclusion indicators in web request parameters.
+author: Ramin Ahmedov
+date: 2026-10-03
+logsource:
+  category: webserver
+detection:
+  selection_parameter:
+    url_query|re: '(?i)(?:^|[&])(?:file|page|path|include|template|view)=(?:file://|php://|data://|expect://|phar://|https?%3a%2f%2f|https?://|\.\./|%2e%2e%2f)'
+  selection_sensitive_file:
+    url_query|contains:
+      - /etc/passwd
+      - '%2fetc%2fpasswd'
+      - win.ini
+  condition: 1 of selection_*
+falsepositives:
+  - Authorized application testing
+  - Legitimate URLs containing file names in supported parameters
+level: high
+tags:
+  - attack.t1190
