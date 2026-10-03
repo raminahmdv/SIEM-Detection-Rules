@@ -1,0 +1,18 @@
+title: SOC Web - Suspicious HTTP Method
+id: a5d8f2c7-3b61-4e90-8a24-6f1c7b9d2e12
+status: experimental
+description: Detects HTTP TRACE or CONNECT methods in web server logs, which may indicate proxy probing, diagnostic abuse, or HTTP method abuse.
+author: Ramin Ahmedov
+date: 2026-10-03
+logsource:
+  category: webserver
+detection:
+  selection:
+    http_method:
+      - TRACE
+      - CONNECT
+  condition: selection
+falsepositives:
+  - Legitimate proxy infrastructure
+  - Authorized troubleshooting
+level: medium
