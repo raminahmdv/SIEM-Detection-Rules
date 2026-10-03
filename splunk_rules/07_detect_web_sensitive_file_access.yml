@@ -1,0 +1,18 @@
+title: SOC Web - Sensitive File or Configuration Access
+id: 6d1f8b34-27c5-4a90-b6e2-9c7f5d3a1b07
+status: experimental
+description: Detects requests for commonly exposed secrets, source-control metadata, and server configuration files.
+author: Ramin Ahmedov
+date: 2026-10-03
+logsource:
+  category: webserver
+detection:
+  selection:
+    url_path|re: '(?i)(?:^|/)(?:\.env(?:\.[^/]*)?|\.git/(?:config|HEAD|index)|\.svn/|\.hg/|wp-config\.php|web\.config|appsettings\.json|server-status|server-info|WEB-INF/web\.xml|actuator/(?:env|configprops|heapdump)|\.DS_Store)(?:/|\?|$)'
+  condition: selection
+falsepositives:
+  - Authorized security testing
+  - Internal diagnostics endpoints intentionally exposed
+level: high
+tags:
+  - attack.t1190
