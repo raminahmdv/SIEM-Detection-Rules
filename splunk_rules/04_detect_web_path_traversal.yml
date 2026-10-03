@@ -1,0 +1,22 @@
+title: SOC Web - Path Traversal Attempt
+id: 73b9a2d1-6c44-4e8f-91a2-5d7c3b8e9f04
+status: experimental
+description: Detects directory traversal indicators, including common URL encoded forms.
+author: Ramin Ahmedov
+date: 2026-10-03
+references:
+  - https://owasp.org/www-community/attacks/Path_Traversal
+logsource:
+  category: webserver
+detection:
+  selection_path:
+    url_path|re: '(?i)(\.\./|\.\.\\|%2e%2e%2f|%2e%2e%5c|%252e%252e%252f|%252e%252e%255c)'
+  selection_query:
+    url_query|re: '(?i)(\.\./|\.\.\\|%2e%2e%2f|%2e%2e%5c|%252e%252e%252f|%252e%252e%255c)'
+  condition: 1 of selection_*
+falsepositives:
+  - Authorized security testing
+  - Applications legitimately using relative path data
+level: high
+tags:
+  - attack.t1190
