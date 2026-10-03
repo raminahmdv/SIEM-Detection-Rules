@@ -1,0 +1,22 @@
+title: SOC Web - Potential Webshell Request
+id: 91c6e3f8-2a74-4d50-b7e1-5f9a8c3d0a10
+status: experimental
+description: Detects HTTP requests commonly associated with webshell access through script-like paths or command execution parameters.
+author: Ramin Ahmedov
+date: 2026-10-03
+references:
+  - https://attack.mitre.org/techniques/T1505/003/
+logsource:
+  category: webserver
+detection:
+  selection_name:
+    url_path|re: '(?i)(?:^|/)(?:cmd|shell|wso|c99|r57|webshell|backdoor)\.(?:php|phtml|jsp|jspx|asp|aspx)(?:/|\?|$)'
+  selection_command:
+    url_query|re: '(?i)(?:^|[&])(?:cmd|exec|command|shell|execute|run)=(?:whoami|id|uname|ipconfig|ifconfig|cat|type|dir|ls|pwd|curl|wget|powershell|cmd(?:\.exe)?)(?:[&]|$)'
+  condition: 1 of selection_*
+falsepositives:
+  - Authorized penetration testing
+  - Malware analysis or security lab activity
+level: critical
+tags:
+  - attack.t1505.003
