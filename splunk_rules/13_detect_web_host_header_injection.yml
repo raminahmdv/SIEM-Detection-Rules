@@ -1,0 +1,18 @@
+title: SOC Web - Host Header Injection Indicator
+id: 3f7b9a21-6c54-4d80-ae13-5b2e8f1c7d13
+status: experimental
+description: Detects suspicious Host header values associated with request smuggling, SSRF-style targeting, or header injection attempts.
+author: Ramin Ahmedov
+date: 2026-10-03
+references:
+  - https://owasp.org/www-community/attacks/Host_Validation_Attack
+logsource:
+  category: webserver
+detection:
+  selection:
+    http_host|re: '(?i)(%0d%0a|%0a|%0d|169\.254\.169\.254|127\.0\.0\.1|localhost|\[::1\])'
+  condition: selection
+falsepositives:
+  - Internal reverse-proxy testing
+  - Applications intentionally using localhost as a Host value
+level: high
