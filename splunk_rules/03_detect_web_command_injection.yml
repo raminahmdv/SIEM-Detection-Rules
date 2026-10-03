@@ -1,0 +1,22 @@
+title: SOC Web - Command Injection Attempt
+id: 2e0c7b65-1e7e-45a8-9c3d-0f4a5b6c7d03
+status: experimental
+description: Detects shell command injection indicators in HTTP URL paths and query strings.
+author: Ramin Ahmedov
+date: 2026-10-03
+references:
+  - https://owasp.org/www-community/attacks/Command_Injection
+logsource:
+  category: webserver
+detection:
+  selection_query:
+    url_query|re: '(?i)(%3b|;|%7c|\||%26%26|&&|%7c%7c|\|\|)(?:%20|\s|\+)*(?:id|whoami|uname|cat|curl|wget|bash|sh|cmd(?:\.exe)?|powershell|nc|netcat)(?:%20|\s|\+|$|[;&|])'
+  selection_path:
+    url_path|re: '(?i)(%3b|;|%7c|\||%26%26|&&|%7c%7c|\|\|)(?:%20|\s|\+)*(?:id|whoami|uname|cat|curl|wget|bash|sh|cmd(?:\.exe)?|powershell|nc|netcat)(?:%20|\s|\+|$|[;&|])'
+  condition: 1 of selection_*
+falsepositives:
+  - Authorized penetration testing
+  - Security scanner traffic
+level: high
+tags:
+  - attack.t1190
