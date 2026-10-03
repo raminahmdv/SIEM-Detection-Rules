@@ -1,15 +1,22 @@
-title: SOC Web - Advanced SQL Injection Attempt
-id: f4b7a120-13c5-4a9b-8e2d-000000000001
+title: SOC Web - SQL Injection Attempt
+id: 5c4c7d54-2b1d-4b96-9f1a-6e8f3d1b2a01
 status: experimental
-description: Web serverlərə yönəlik mürəkkəb SQL Injection (SQLi) və WAF atlatma cəhdlərini aşkarlayır (OWASP A03).
+description: Detects common SQL injection indicators in HTTP URL paths and query strings.
 author: Ramin Ahmedov
 date: 2026-10-03
-tags:
-  - attack.t1190
+references:
+  - https://owasp.org/www-community/attacks/SQL_Injection
 logsource:
   category: webserver
 detection:
-  selection:
-    cs-uri-query|re: '(?i)(union(\s|\+)+select|select.*from|or\s*1\s*=\s*1|sleep\(\d+\)|xp_cmdshell|%27)'
-  condition: selection
+  selection_query:
+    url_query|re: '(?i)(union(?:%20|\s|\+)+select|select(?:%20|\s|\+)+.+(?:%20|\s|\+)from|insert(?:%20|\s|\+)+into|update(?:%20|\s|\+)+.+set|delete(?:%20|\s|\+)+from|sleep(?:%20|\s|\+)*\(|benchmark(?:%20|\s|\+)*\(|waitfor(?:%20|\s|\+)+delay|%27(?:%20|\s|\+)*(?:or|and)(?:%20|\s|\+)+)'
+  selection_path:
+    url_path|re: '(?i)(union(?:%20|\s|\+)+select|select(?:%20|\s|\+)+.+(?:%20|\s|\+)from|sleep(?:%20|\s|\+)*\(|benchmark(?:%20|\s|\+)*\(|waitfor(?:%20|\s|\+)+delay)'
+  condition: 1 of selection_*
+falsepositives:
+  - Authorized vulnerability scanning
+  - Penetration testing
 level: high
+tags:
+  - attack.t1190
